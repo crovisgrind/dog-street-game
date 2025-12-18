@@ -48,7 +48,7 @@ function create() {
     // DOG
     //----------------------------------
     dog = this.physics.add.sprite(200, 200, "dog");
-    dog.setScale(0.5);
+    dog.setScale(1);
     dog.setCollideWorldBounds(true);
 
     this.physics.add.collider(dog, ground);
