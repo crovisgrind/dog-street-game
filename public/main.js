@@ -492,16 +492,21 @@ function levelComplete() {
     this.activePees = 0;
     updatePrestigeBar.call(this);
     
+    // Determinar tamanho da fonte baseado na largura da tela
+    const isMobile = window.innerWidth < 768;
+    const fontSize = isMobile ? "32px" : "48px";
+    
     const txt = this.add.text(
         this.cameras.main.centerX,
         this.cameras.main.centerY,
-        "FASE COMPLETA!\nðŸŽ‰ðŸ•ðŸŽ‰",
+        "Fase completa!",
         {
-            fontSize: "48px",
+            fontSize: fontSize,
             color: "#fff",
             backgroundColor: "#000",
             padding: { x: 30, y: 20 },
-            align: "center"
+            align: "center",
+            wordWrap: { width: window.innerWidth - 40 }
         }
     ).setOrigin(0.5).setScrollFactor(0);
     
@@ -539,16 +544,23 @@ function dogHitCar() {
         }
     });
     
+    // Determinar tamanho da fonte baseado na largura da tela
+    const isMobile = window.innerWidth < 768;
+    const mainFontSize = isMobile ? "28px" : "42px";
+    const btnFontSize = isMobile ? "16px" : "24px";
+    const btnPadding = isMobile ? { x: 15, y: 8 } : { x: 20, y: 10 };
+
     const txt = this.add.text(
         this.cameras.main.centerX,
-        this.cameras.main.centerY,
-        "VOCÃŠ FOI ATROPELADO! ðŸš—ðŸ'¥ðŸ•",
+        this.cameras.main.centerY - 50,
+        "Você foi atropelado!",
         {
-            fontSize: "42px",
+            fontSize: mainFontSize,
             color: "#ff0000",
             backgroundColor: "#000",
             padding: { x: 20, y: 15 },
-            align: "center"
+            align: "center",
+            wordWrap: { width: window.innerWidth - 40 }
         }
     ).setOrigin(0.5).setScrollFactor(0);
     
@@ -561,13 +573,15 @@ function dogHitCar() {
     
     const restartBtn = this.add.text(
         this.cameras.main.centerX,
-        this.cameras.main.centerY + 100,
-        "CLIQUE PARA RECOMEÃ‡AR",
+        this.cameras.main.centerY + 80,
+        "Clique para recomeçar",
         {
-            fontSize: "24px",
+            fontSize: btnFontSize,
             color: "#fff",
             backgroundColor: "#333",
-            padding: { x: 20, y: 10 }
+            padding: btnPadding,
+            align: "center",
+            wordWrap: { width: window.innerWidth - 40 }
         }
     ).setOrigin(0.5).setScrollFactor(0);
     
