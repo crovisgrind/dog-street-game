@@ -3,8 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <title>Dog Street Game</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+
+  <meta name="viewport"
+        content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
   <script src="https://cdn.jsdelivr.net/npm/phaser@3/dist/phaser.min.js"></script>
+
   <style>
     * {
       margin: 0;
@@ -13,19 +17,17 @@
     }
 
     html, body { 
-      height: 100%; 
-      margin: 0; 
+      width: 100%;
+      height: 100%;
       background: #222; 
-      display: flex; 
-      align-items: center; 
-      justify-content: center;
+      overflow: hidden;
       touch-action: none;
     }
 
     #game-container { 
-      position: relative;
       width: 100vw;
       height: 100vh;
+      position: relative;
     }
 
     canvas { 
@@ -35,78 +37,58 @@
       height: 100%; 
     }
 
-    /* ===== BOTÕES DIRECIONAIS - MOBILE ===== */
+    /* ===== CONTROLES TOUCH (MOBILE + TABLET) ===== */
     #mobile-controls {
       position: fixed;
       bottom: 20px;
       left: 20px;
       display: none;
       flex-direction: column;
-      gap: 5px;
+      gap: 6px;
       z-index: 1000;
     }
 
     .dpad-row {
       display: flex;
-      gap: 5px;
       justify-content: center;
+      gap: 6px;
     }
 
     .dpad-btn {
-      width: 50px;
-      height: 50px;
-      background: rgba(100, 150, 255, 0.7);
-      border: 2px solid rgba(100, 150, 255, 1);
-      border-radius: 5px;
+      width: 52px;
+      height: 52px;
+      background: rgba(100,150,255,0.7);
+      border: 2px solid rgba(100,150,255,1);
+      border-radius: 6px;
       color: white;
-      font-size: 24px;
+      font-size: 22px;
       font-weight: bold;
-      cursor: pointer;
       user-select: none;
       touch-action: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.1s;
     }
 
     .dpad-btn:active {
-      background: rgba(100, 150, 255, 0.9);
       transform: scale(0.95);
+      background: rgba(100,150,255,0.95);
     }
 
-    /* ===== APARECER EM MOBILE ===== */
-    @media (max-width: 768px) {
+    /* 🔑 APARECE EM QUALQUER DISPOSITIVO TOUCH */
+    @media (pointer: coarse) {
       #mobile-controls {
         display: flex;
       }
     }
-
-    /* ===== MODO LANDSCAPE (celular deitado) ===== */
-    @media (max-height: 600px) {
-      #mobile-controls {
-        bottom: 10px;
-        left: 10px;
-      }
-
-      .dpad-btn {
-        width: 40px;
-        height: 40px;
-        font-size: 18px;
-      }
-    }
   </style>
 </head>
+
 <body>
   <div id="game-container"></div>
-  
-  <!-- ===== CONTROLES MOBILE ===== -->
+
+  <!-- CONTROLES TOUCH -->
   <div id="mobile-controls">
-    <!-- Botão de cima -->
     <div class="dpad-row">
       <button class="dpad-btn" id="btn-up">⬆️</button>
     </div>
-    <!-- Botões da esquerda, baixo, direita -->
     <div class="dpad-row">
       <button class="dpad-btn" id="btn-left">⬅️</button>
       <button class="dpad-btn" id="btn-down">⬇️</button>
@@ -115,58 +97,35 @@
   </div>
 
   <script>
-    // ===== SETUP DOS BOTÕES MOBILE =====
-    // Este objeto armazena qual botão está sendo pressionado
-    const mobileInput = {
-      left: false,
-      right: false,
-      up: false,
-      down: false
-    };
+    const mobileInput = { left:false, right:false, up:false, down:false };
 
     function setupMobileControls() {
-      // Mapear cada botão HTML para sua direção
-      const buttons = {
+      const map = {
         'btn-up': 'up',
         'btn-down': 'down',
         'btn-left': 'left',
         'btn-right': 'right'
       };
 
-      // Para cada botão...
-      Object.entries(buttons).forEach(([buttonId, direction]) => {
-        const btn = document.getElementById(buttonId);
-        
-        // Quando toca no botão (mobile)
-        btn.addEventListener('touchstart', (e) => {
+      Object.entries(map).forEach(([id, dir]) => {
+        const btn = document.getElementById(id);
+
+        btn.addEventListener('touchstart', e => {
           e.preventDefault();
-          mobileInput[direction] = true;
+          mobileInput[dir] = true;
         });
-        
-        // Quando solta do botão (mobile)
-        btn.addEventListener('touchend', (e) => {
+
+        btn.addEventListener('touchend', e => {
           e.preventDefault();
-          mobileInput[direction] = false;
+          mobileInput[dir] = false;
         });
 
-        // Quando clica com mouse (desktop)
-        btn.addEventListener('mousedown', () => {
-          mobileInput[direction] = true;
-        });
-
-        // Quando solta o clique (desktop)
-        btn.addEventListener('mouseup', () => {
-          mobileInput[direction] = false;
-        });
-
-        // Se sair do botão sem soltar (desktop)
-        btn.addEventListener('mouseleave', () => {
-          mobileInput[direction] = false;
-        });
+        btn.addEventListener('mousedown', () => mobileInput[dir] = true);
+        btn.addEventListener('mouseup', () => mobileInput[dir] = false);
+        btn.addEventListener('mouseleave', () => mobileInput[dir] = false);
       });
     }
 
-    // Configurar botões quando a página carregar
     setupMobileControls();
   </script>
 
