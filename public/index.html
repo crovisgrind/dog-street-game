@@ -72,10 +72,26 @@
       background: rgba(100,150,255,0.95);
     }
 
-    /* 🔑 APARECE EM QUALQUER DISPOSITIVO TOUCH */
-    @media (pointer: coarse) {
+    /* 🔑 DETECÇÃO DE TOUCH MAIS CONFIAVEL PARA MOBILE E TABLET */
+    @media (hover: none) and (pointer: coarse),
+           (hover: none) and (pointer: fine),
+           (max-width: 1024px) {
       #mobile-controls {
         display: flex;
+      }
+    }
+
+    /* 🔧 Ajuste para tablets maiores */
+    @media (min-width: 768px) and (max-width: 1024px) {
+      .dpad-btn {
+        width: 60px;
+        height: 60px;
+        font-size: 26px;
+      }
+      
+      #mobile-controls {
+        bottom: 40px;
+        left: 40px;
       }
     }
   </style>
@@ -126,7 +142,34 @@
       });
     }
 
+    // Detecção mais robusta de dispositivo touch
+    function detectTouchDevice() {
+      return ('ontouchstart' in window) ||
+             (navigator.maxTouchPoints > 0) ||
+             (navigator.msMaxTouchPoints > 0);
+    }
+
+    // Mostrar controles se for dispositivo touch
+    function showMobileControlsIfNeeded() {
+      const controls = document.getElementById('mobile-controls');
+      
+      // Se for dispositivo touch OU tela menor que 1024px (tablet)
+      if (detectTouchDevice() || window.innerWidth <= 1024) {
+        controls.style.display = 'flex';
+      }
+      
+      // Atualizar quando a janela mudar de tamanho
+      window.addEventListener('resize', () => {
+        if (detectTouchDevice() || window.innerWidth <= 1024) {
+          controls.style.display = 'flex';
+        } else {
+          controls.style.display = 'none';
+        }
+      });
+    }
+
     setupMobileControls();
+    showMobileControlsIfNeeded();
   </script>
 
   <script src="main.js"></script>
